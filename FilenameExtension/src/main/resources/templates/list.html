@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- 필요한 스크립트 및 스타일 추가 -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        /* 필요한 스타일 추가 */
+        .checkbox-item {
+            display: inline-block;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>◎ 파일 확장자 차단</h1>
+    
+    <form id="updateForm" th:action="@{/update}" method="post">
+        <ul>
+            <li th:each="dto : ${list}" style="display: inline-block; margin-right: 10px;" class="checkbox-item">
+               <input type="checkbox" class="checkbox" th:id="'checkbox-' + ${dto.no}" name="checkedItems" th:value="${dto.no}" th:checked="${dto.checkedValue == 'Y'}" />
+
+                <span th:text="${dto.no}">번호</span>
+                <span th:text="${dto.extensionName}">이름</span>
+            </li>
+        </ul>
+    </form>
+    
+
+      <div class="reply">
+	    <form class="reply-form" method="post" th:action="|/list|">
+	      <div>
+	        <div class="re-title">
+	          <span>확장자</span>
+	        </div>
+	        
+	        <div class="flex">
+            	<span><input type="text" th:name="extensionName" placeholder="확장자 입력" style="width: 100px; margin-right: 10px" /></span>
+            	<span><input class="reply_button" type="submit" value="등록" /></span>
+        	</div>
+	        
+	      </div>
+	    </form>
+	    
+	    <div>
+          <th:block th:each="rdto : ${customList}" >
+            <div class="flex">
+	          <div class="reply-list section">
+	           
+	            <span th:text="${rdto.cno}" style="display: inline-block; margin-right: 10px">번호</span>
+	            <span th:utext="${rdto.extensionName}" style="display: inline-block; margin-right: 10px">이름</span>
+	          </div>
+	          
+	            <form th:action="|/list|" method="post">
+	              <input type="hidden" name="_method" value="DELETE" />
+	              <input type="hidden" name="cno" th:value="${rdto.cno}" />
+	              <input type="hidden" name="extensionName" th:value="${rdto.extensionName}" />
+	              <button class="reply_button">X</button>
+	            </form>
+        	</div>
+       	 </th:block>
+       	 </div>
+
+    <!-- 체크박스 변경 감지 및 AJAX 요청 스크립트 추가 -->
+    <script>
+        $(document).ready(function () {
+            $('.checkbox').change(function () {
+                var itemId = $(this).val();
+                var checked = $(this).prop('checked');
+                updateItem(itemId, checked);
+            });
+        });
+
+        
+        
+        function updateItem(itemId, checked) {
+		    $.ajax({
+		        type: 'POST',
+		        url: '/updateItem',
+		        contentType: 'application/json',
+		        data: JSON.stringify({itemId: itemId, checked: checked}),
+		        success: function () {
+					alert("성 공 성 공")
+		            console.log('Item updated successfully');
+		        },
+		        error: function () {
+		            console.error('Failed to update item');
+		        }
+		    });
+}
+
+    </script>
+
+</body>
+</html>
