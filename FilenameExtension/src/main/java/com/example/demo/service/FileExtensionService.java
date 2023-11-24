@@ -22,6 +22,7 @@ public class FileExtensionService {
     @Autowired
     private CustomExtensionRepo customExtensionRepo;
 
+    //고정 리스트
     public void getListAll(Model model) {
         List<FixedExtension> result = fixedExtensionRepo.findAll();
 
@@ -56,8 +57,16 @@ public class FileExtensionService {
 	// 커스텀 등록
 	@Transactional
 	public void save(CustomExtension customExtension) {
-
-		customExtensionRepo.save(customExtension);
+		
+        long count = customExtensionRepo.count();
+        System.out.println("-------------------------"+count);
+        
+        if (count < 200) {
+        	customExtensionRepo.save(customExtension);
+        } else {
+            
+            throw new RuntimeException("200개를 초과하여 등록 불가합니다.");
+        }
 	}
 
 	// 커스텀 리스트 불러오기
@@ -69,10 +78,12 @@ public class FileExtensionService {
 
 	}
 
+	//커스텀 삭제
 	@Transactional
-	public void delete(long cno) {
+	public void deleteByCno(Long cno) {
 		customExtensionRepo.deleteById(cno);
 	}
+
 
 }
 

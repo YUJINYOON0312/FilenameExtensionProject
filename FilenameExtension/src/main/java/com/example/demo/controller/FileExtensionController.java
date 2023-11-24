@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -33,7 +34,10 @@ public class FileExtensionController {
 	
 	@GetMapping("/list")
     public String ListReg(Model model) {
+		//고정
 		service.getListAll(model);
+		//커스텀
+		service.findAll(model);
 		return "/list";
     }
 	
@@ -42,12 +46,20 @@ public class FileExtensionController {
     public String FixedList(@RequestParam("extensionName") String extensionName, CustomExtension customExtension) {
 	    // CustomExtension 객체 생성 및 설정
 	    CustomExtension newExtension = new CustomExtension();
-	    newExtension.setExtensionName(extensionName);
 
-	    // service.save 메서드에 새로운 CustomExtension 객체 전달
+	    try {
+	    	
+	    newExtension.setExtensionName(extensionName);
 	    service.save(newExtension);
+	    
+	    }catch(Exception e){
+	    	
+	    	e.printStackTrace();
+	    }
+	    
 	    return "redirect:/list";
     }
+	
 	
 	//고정 차단자 수정
     @PostMapping("/updateItem")
@@ -80,10 +92,11 @@ public class FileExtensionController {
     }
 	
 	// 커스텀 삭제
-	@DeleteMapping("/list")
-	public String delete(long cno) {
-
-		service.delete(cno);
-		return "redirect:/list";
+	@RequestMapping(value = "/list/{cno}", method = RequestMethod.POST)
+	public String deleteCustomExtension(@PathVariable Long cno) {
+		System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"+cno);
+	    service.deleteByCno(cno);
+	    System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"+cno);
+	    return "redirect:/list";
 	}
 }
