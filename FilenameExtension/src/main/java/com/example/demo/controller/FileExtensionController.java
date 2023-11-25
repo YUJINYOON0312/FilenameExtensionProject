@@ -29,7 +29,7 @@ public class FileExtensionController {
 	
 	@GetMapping("/")
 	public String index() {
-		return "/list";
+		return "/index";
 	}
 	
 	//리스트 불러오기
