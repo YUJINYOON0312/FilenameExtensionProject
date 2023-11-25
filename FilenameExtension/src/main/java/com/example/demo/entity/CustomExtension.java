@@ -31,6 +31,5 @@ public class CustomExtension{
 
     @Column(unique = true)
     private String extensionName;
-
-    
+   
 }

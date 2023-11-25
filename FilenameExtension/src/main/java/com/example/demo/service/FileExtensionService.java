@@ -25,7 +25,6 @@ public class FileExtensionService {
     //고정 리스트
     public void getListAll(Model model) {
         List<FixedExtension> result = fixedExtensionRepo.findAll();
-
         model.addAttribute("list", result);
     }
 
@@ -47,32 +46,22 @@ public class FileExtensionService {
             fixedExtensionRepo.save(item);
         });
     }
-
-
-	
-	//////////////////////////////////////
-
-	
 	
 	// 커스텀 등록
 	@Transactional
-	public void save(CustomExtension customExtension) {
-		
+	public void save(CustomExtension customExtension) {		
         long count = customExtensionRepo.count();
-        System.out.println("-------------------------"+count);
         
         if (count < 200) {
         	customExtensionRepo.save(customExtension);
-        } else {
-            
+        } else {            
             throw new RuntimeException("200개를 초과하여 등록 불가합니다.");
         }
 	}
 
-	// 커스텀 리스트 불러오기
+	//커스텀 리스트
 	@Transactional
 	public void findAll(Model model) {
-
 		List<CustomExtension> result = customExtensionRepo.findAll();
 		model.addAttribute("customList", result);
 
@@ -83,7 +72,6 @@ public class FileExtensionService {
 	public void deleteByCno(Long cno) {
 		customExtensionRepo.deleteById(cno);
 	}
-
 
 }
 

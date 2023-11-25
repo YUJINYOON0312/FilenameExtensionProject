@@ -32,13 +32,8 @@ public class FixedExtension {
     
     private boolean isChecked;
 
-    // isChecked를 Thymeleaf에서 사용할 문자열로 변환
     public String getCheckedValue() {
         return isChecked ? "Y" : "N";
     }
 
-	public Object setCheckedValue(Object object) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
