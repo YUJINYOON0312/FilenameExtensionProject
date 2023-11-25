@@ -22,11 +22,11 @@
 		        contentType: 'application/json',
 		        data: JSON.stringify({itemId: itemId, checked: checked}),
 		        success: function () {
-					alert("성 공 성 공")
-		            console.log('Item updated successfully');
+					//alert("성공")
+		            console.log('성공');
 		        },
 		        error: function () {
-		            console.error('Failed to update item');
+		            console.error('실패');
 		        }
 		    });
 }
@@ -38,48 +38,61 @@
             display: inline-block;
             margin-right: 10px;
         }
+        .flex {
+		  display: flex;
+		}
+		.inline-flex {
+		  display: inline-flex;
+		}
+		li {
+		  list-style: none;
+		}
+		.form-title {
+			width: 130px;	
+		}
     </style>
 </head>
-<body>
-
-    <h1>◎ 파일 확장자 차단</h1>
-    
-    <form id="updateForm" th:action="@{/update}" method="post">
-        <ul>
+<body style="max-width: 700px; margin: 0 auto;">
+    <h1 style="padding-bottom: 15px; color: #623ad6; border-bottom: 2px solid #623ad6;">◎ 파일 확장자 차단</h1>
+    <p>파일확장자에 따라 특정 형식의 파일을 첨부하거나 전송하지 못하도록 제한</p>
+    <div class="flex" style="margin: 20px 0;">
+		<label class="form-title">고정 확장자</label>
+		<form id="updateForm" th:action="@{/update}" method="post">
+        <ul style="margin: 0; padding: 0;">
             <li th:each="dto : ${list}" style="display: inline-block; margin-right: 10px;" class="checkbox-item">
                <input type="checkbox" class="checkbox" th:id="'checkbox-' + ${dto.no}" name="checkedItems" th:value="${dto.no}" th:checked="${dto.checkedValue == 'Y'}" />
                 <span th:text="${dto.extensionName}">이름</span>
             </li>
         </ul>
-    </form>
+    	</form>
+	</div>
+	<div class="flex">
+		<label class="form-title">커스텀 확장자</label>
+		<form class="reply-form" method="post" th:action="|/list|">
+			<span><input type="text" th:name="extensionName" placeholder="확장자 입력" style="width: 300px; margin-right: 10px" maxlength="20"/></span>
+            <span><input class="reply_button" type="submit" value="+추가" style="background-color: #623ad6; color: #fff; border: 1px solid  #623ad6; border-radius: 4px;"/></span>
+	    </form>
+	</div>
+    <div style="width: 450px; min-height: 400px; margin: 20px 0 0 130px; padding: 5px 10px 5px; border: 1px solid  #623ad6; border-radius: 4px;">
+		<div style="margin-bottom: 7px; color: #777; font-weight: bold;">
+			<span>3</span>
+			<span>/200</span>
+		</div>
+		<th:block th:each="cdto : ${customList}">
+			<div class="inline-flex" style="border: 1px solid  #623ad6; border-radius: 4px; padding: 0 2px 2px 5px; margin: 5px 0">
+				<span th:utext="${cdto.extensionName}" style="display: inline-block; margin-right: 10px">이름</span>
+				<form th:action="@{|/list/${cdto.cno}|}" method="post">
+					<input type="hidden" name="_method" value="DELETE" />
+					<button class="button" style="border: 0; background-color: transparent;">X</button>
+				</form>
+			</div>
+		</th:block>
+    </div>
     
 
-      <div class="reply">
-	    <form class="reply-form" method="post" th:action="|/list|">
-	      <div>
-	        <div class="re-title">
-	          <span>확장자</span>
-	        </div>
-	        
-	        <div class="flex">
-            	<span><input type="text" th:name="extensionName" placeholder="확장자 입력" style="width: 300px; margin-right: 10px" maxlength="20"/></span>
-            	<span><input class="reply_button" type="submit" value="등록" /></span>
-        	</div>
-	        
-	      </div>
-	    </form>
+      
+
 	    
-	    <div>
-		    <th:block th:each="rdto : ${customList}">
-		        <div class="flex">
-		                <span th:utext="${rdto.extensionName}" style="display: inline-block; margin-right: 10px">이름</span>           
-		            <form th:action="@{|/list/${rdto.cno}|}" method="post">
-					    <input type="hidden" name="_method" value="DELETE" />
-					    <button class="button">X</button>
-					</form>
-		        </div>
-		    </th:block>
-       	 </div>
 
 
 
