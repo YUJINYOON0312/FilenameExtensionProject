@@ -29,7 +29,7 @@ public class FileExtensionController {
 	
 	@GetMapping("/")
 	public String index() {
-		return "/index";
+		return "index";
 	}
 	
 	//리스트 불러오기
@@ -39,7 +39,7 @@ public class FileExtensionController {
 		service.getListAll(model);
 		//커스텀
 		service.findAll(model);
-		return "/list";
+		return "list";
     }
 	
 	//커스텀 차단자 등록
